@@ -1,0 +1,31 @@
+{
+  "name": "brain-evolve",
+  "version": "1.0.0",
+  "description": "让 Claude Code 从你的行为中学习——自动提取规则、衰减评分、进化为可复用 skill",
+  "main": "install.js",
+  "scripts": {
+    "install": "node install.js",
+    "uninstall": "node install.js --uninstall",
+    "test": "node test/decay_scorer.test.js"
+  },
+  "keywords": [
+    "claude-code",
+    "hooks",
+    "self-evolving",
+    "skill-generation",
+    "memory",
+    "rules-engine"
+  ],
+  "author": "hondopan",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "install.js",
+    "learning/",
+    "test/",
+    "README.md",
+    "QUICKSTART.md"
+  ]
+}

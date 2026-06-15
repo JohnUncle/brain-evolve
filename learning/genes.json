@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "description": "Signal-to-gene mapping for claude-evolve learning pipeline.",
+  "genes": [
+    {
+      "id": "gene_repair",
+      "trigger": "correction",
+      "description": "User corrected Claude. Extract rules from feedback.",
+      "signals": ["correction", "feedback_memory"]
+    },
+    {
+      "id": "gene_innovate",
+      "trigger": "observation",
+      "description": "Significant session with learnable patterns.",
+      "signals": ["significant_session", "has_observations"]
+    },
+    {
+      "id": "gene_optimize",
+      "trigger": "periodic",
+      "description": "Evaluate and score existing rules. Demote underperformers.",
+      "signals": ["periodic_check"]
+    },
+    {
+      "id": "gene_cleanup",
+      "trigger": "many_rules",
+      "description": "Too many active rules. Merge or remove redundant ones.",
+      "signals": ["many_rules"]
+    },
+    {
+      "id": "gene_observe",
+      "trigger": "quiet",
+      "description": "Trivial session. Record but take no action.",
+      "signals": []
+    },
+    {
+      "id": "gene_skillify",
+      "trigger": "mature_patterns",
+      "description": "Accumulated patterns form a methodology. Classify complexity and promote to higher output format.",
+      "signals": ["cross_session_consistency", "methodology_detected", "high_complexity_patterns"]
+    },
+    {
+      "id": "gene_harvest",
+      "trigger": "periodic_cognitive",
+      "description": "brain-evolve: Detect behavioral patterns from conversation. Updates cognitive model with confidence tracking.",
+      "signals": ["cognitive_check", "behavioral_pattern_detected", "every_5_sessions"]
+    }
+  ]
+}

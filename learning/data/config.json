@@ -1,0 +1,19 @@
+{
+  "skill_mode": "conservative",
+  "skill_policy": {
+    "min_rules": 5,
+    "min_score": 7,
+    "min_stability": 5,
+    "similarity_threshold": 0.4
+  },
+  "decay": {
+    "lambda_min": 0.003,
+    "lambda_max": 0.020,
+    "failure_weight": 1.5
+  },
+  "lifecycle": {
+    "max_active": 10,
+    "dormant_threshold": 0.5,
+    "dead_after_sessions": 15
+  }
+}

@@ -1,79 +1,81 @@
 # Brain-Evolve 🧠
 
-> 让 Claude Code 从你的行为中学习，自动生成可复用的规则和技能。
+> Let Claude Code learn from your behavior. Automatically generate reusable rules and skills.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)]()
 [![Node](https://img.shields.io/badge/node-%3E%3D18-blue.svg)]()
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Hook-orange.svg)]()
 
-## 它是什么
+[中文文档](README_zh.md)
 
-Brain-Evolve 是一个 **Claude Code 自我进化系统**。它通过 Hook 监听你的工作行为，自动提取规则、评分、衰减、合并，最终将成熟的行为模式生成为可复用的 skill 文件。
+## What It Does
 
-简单说：**你用 Claude Code 越多，它越懂你该怎么干活。**
+Brain-Evolve is a **self-evolution system for Claude Code**. It listens to your workflow via Hooks — capturing behavior, extracting rules, scoring, decaying, and merging them. When patterns mature, they're automatically promoted into reusable skill files.
 
-## 工作原理
+In short: **the more you use Claude Code, the better it understands how you work.**
+
+## How It Works
 
 ```
-你的会话 → 行为捕获 → 规则提取 → 衰减评分 → 生命周期管理 → skill 生成
+Your Session → Behavior Capture → Rule Extraction → Decay Scoring → Lifecycle → Skill Generation
 ```
 
-### 核心机制
+### Core Mechanisms
 
-| 机制 | 说明 |
-|------|------|
-| **Hook 监听** | SessionStart 注入上下文、PostToolUse 记录行为、Stop 触发进化 |
-| **基因管道** | 7 种基因自动选择：repair / innovate / optimize / cleanup / skillify / harvest / observe |
-| **指数衰减** | `C(t) = C₀ × e^(-λt)`，规则不用就忘，用了就强化 |
-| **贝叶斯反馈** | 成功（α+1）减缓衰减，失败（β×1.5）加速衰减——1 次失败 ≈ 5 次成功 |
-| **生命周期** | `candidate → active → dormant → dead`，硬上限 10 条活跃规则 |
-| **Skill 生成** | score > 7 + relevance ≥ 5 + stability ≥ 5 → 自动升级为方法论文件 |
+| Mechanism | Description |
+|-----------|-------------|
+| **Hook Listeners** | SessionStart injects context, PostToolUse logs actions, Stop triggers evolution |
+| **Gene Pipeline** | 7 genes auto-select based on context: repair / innovate / optimize / cleanup / skillify / harvest / observe |
+| **Exponential Decay** | `C(t) = C₀ × e^(-λt)` — unused rules fade, used rules strengthen |
+| **Bayesian Feedback** | Success (α+1) slows decay, failure (β×1.5) accelerates it — 1 failure ≈ 5 successes |
+| **Lifecycle** | `candidate → active → dormant → dead`, hard cap of 10 active rules |
+| **Skill Generation** | score > 7 + relevance ≥ 5 + stability ≥ 5 → auto-promotes to a skill file |
 
-## 快速开始
+## Quick Start
 
-### 1. 安装
+### 1. Install
 
 ```bash
-# 克隆到你的项目
+# Clone into your project
 cd your-project/.claude
 git clone https://github.com/JohnUncle/brain-evolve.git
 cd brain-evolve
 
-# 注册 Hook
+# Register hooks
 node install.js
 ```
 
-安装脚本会向 `~/.claude/settings.json` 注册 3 个 Hook：
-- `SessionStart` — 注入规则上下文
-- `PostToolUse` — 记录工具调用
-- `Stop` — 触发进化管道
+This registers 3 hooks in `~/.claude/settings.json`:
+- `SessionStart` — injects rule context
+- `PostToolUse` — logs tool calls
+- `Stop` — triggers evolution pipeline
 
-### 2. 重启 Claude Code
+### 2. Restart Claude Code
 
 ```bash
-exit  # 退出当前会话
-claude  # 重新启动
+exit   # quit current session
+claude # restart
 ```
 
-### 3. 正常使用
+### 3. Use Normally
 
-不需要任何额外操作。系统会在每次会话结束时自动：
-1. 分析你的工具调用模式
-2. 提取规则和反模式
-3. 更新衰减评分
-4. 必要时合并冗余规则
-5. 条件成熟时生成 skill 文件
+No extra steps needed. After each session, the system automatically:
+1. Analyzes your tool-call patterns
+2. Extracts rules and anti-patterns
+3. Updates decay scores
+4. Merges redundant rules when needed
+5. Generates skill files when conditions are met
 
-### 4. 卸载
+### 4. Uninstall
 
 ```bash
 cd your-project/.claude/brain-evolve
 node install.js --uninstall
 ```
 
-## 配置
+## Configuration
 
-编辑 `learning/data/config.json`：
+Edit `learning/data/config.json`:
 
 ```json
 {
@@ -87,23 +89,23 @@ node install.js --uninstall
 }
 ```
 
-| 配置项 | 说明 | 默认值 |
-|--------|------|--------|
-| `skill_mode` | `conservative`（5+ 规则生成 skill）/ `aggressive`（3+） | conservative |
-| `min_score` | 规则成熟的最低分数（0-10） | 7 |
-| `min_stability` | 生成 skill 的最低稳定性（< 5 永不生成） | 5 |
-| `similarity_threshold` | 规则合并的关键词相似度阈值 | 0.4 |
-| `max_active` | 活跃规则上限 | 10 |
+| Option | Description | Default |
+|--------|-------------|---------|
+| `skill_mode` | `conservative` (5+ rules to generate) / `aggressive` (3+) | conservative |
+| `min_score` | Minimum maturity score (0-10) for skill generation | 7 |
+| `min_stability` | Minimum stability for skill generation (< 5 = never) | 5 |
+| `similarity_threshold` | Keyword overlap threshold for rule merging | 0.4 |
+| `max_active` | Maximum active rules | 10 |
 
-## 衰减模型
+## Decay Model
 
-每条规则有一个 **stability** 值（1-10），决定衰减速率：
+Every rule has a **stability** value (1-10) that determines its decay rate:
 
-| Stability | 半衰期 | 适用场景 |
-|-----------|--------|----------|
-| 1-3 | 35-56 天 | 临时技巧、特定命令 |
-| 4-6 | 56-115 天 | 工具流程、项目规范 |
-| 7-10 | 115-231 天 | 行为模式、核心原则 |
+| Stability | Half-life | Best For |
+|-----------|-----------|----------|
+| 1-3 | 35-56 days | Temporary tricks, one-off commands |
+| 4-6 | 56-115 days | Tool workflows, project conventions |
+| 7-10 | 115-231 days | Behavioral patterns, core principles |
 
 ```
 lambda_base = 0.003 + (0.020 - 0.003) × (10 - stability) / 9
@@ -111,63 +113,63 @@ lambda_eff  = lambda_base × (β + 1) / (α + 1)
 confidence  = C₀ × e^(-lambda_eff × days)
 ```
 
-三级置信状态：
-- **TRUST** (≥ 0.8)：直接应用
-- **VERIFY** (0.5-0.8)：需要验证
-- **REVALIDATE** (< 0.5)：需要重新评估
+Three confidence states:
+- **TRUST** (≥ 0.8): apply directly
+- **VERIFY** (0.5-0.8): needs verification
+- **REVALIDATE** (< 0.5): needs re-evaluation
 
-## 目录结构
+## Directory Structure
 
 ```
 brain-evolve/
-├── install.js                    # 安装/卸载脚本
+├── install.js                    # Install / uninstall script
 ├── learning/
-│   ├── processRules.js           # 进化管道主流程
-│   ├── ruleEngine.js             # 规则引擎（生命周期管理）
-│   ├── decay_scorer.js           # 衰减计算引擎
-│   ├── llmBrain.js               # LLM 调用封装（带重试+退避）
-│   ├── claudeMdWriter.js         # CLAUDE.md 自动写入
-│   ├── cognitiveModel.js         # 认知模型集成
-│   ├── skillWriter.js            # Skill 文件生成
-│   ├── crossProjectStore.js      # 跨项目模式迁移
-│   ├── sessionMemory.js          # 会话记忆索引
-│   ├── genes.json                # 基因定义
+│   ├── processRules.js           # Evolution pipeline orchestrator
+│   ├── ruleEngine.js             # Rule engine (lifecycle management)
+│   ├── decay_scorer.js           # Decay scoring engine
+│   ├── llmBrain.js               # LLM call wrapper (retry + backoff)
+│   ├── claudeMdWriter.js         # Auto-write to CLAUDE.md
+│   ├── cognitiveModel.js         # Cognitive model integration
+│   ├── skillWriter.js            # Skill file generation
+│   ├── crossProjectStore.js      # Cross-project pattern migration
+│   ├── sessionMemory.js          # Session memory index
+│   ├── genes.json                # Gene definitions
 │   ├── hooks/
-│   │   ├── session-start.js      # 会话启动：注入上下文
-│   │   ├── post-tool.js          # 工具调用后：记录行为
-│   │   └── session-end.js        # 会话结束：触发进化
+│   │   ├── session-start.js      # Session start: inject context
+│   │   ├── post-tool.js          # Post-tool-use: log behavior
+│   │   └── session-end.js        # Session end: trigger evolution
 │   └── data/
-│       ├── config.json           # 配置（需提交）
-│       └── rules.json            # 规则数据库（运行时生成）
-└── test/                         # 测试
+│       ├── config.json           # Config (committed)
+│       └── rules.json            # Rule database (runtime-generated)
+└── test/                         # Tests
 ```
 
-## 与 claude-mem 的关系
+## Relationship with claude-mem
 
-两者可以共存，职责互补：
+Both can coexist with complementary roles:
 
-| 系统 | 职责 | 类比 |
-|------|------|------|
-| **claude-mem** | 记录发生了什么 | 情景记忆 |
-| **brain-evolve** | 提炼应该怎么做 | 程序性记忆 |
+| System | Role | Analogy |
+|--------|------|---------|
+| **claude-mem** | Records what happened | Episodic memory |
+| **brain-evolve** | Extracts how to act | Procedural memory |
 
-## 成本估算
+## Cost Estimate
 
-系统通过 `claude` CLI 调用 LLM（你的本地 Claude Code 已配置即可），典型场景：
+The system calls LLMs via the `claude` CLI (your local Claude Code setup). Typical usage:
 
-| 场景 | LLM 调用 | 月成本估算 |
-|------|---------|-----------|
-| 每天 5 个会话 | ~8 次/天 | ~$7/月 |
-| 每天 10 个会话 | ~15 次/天 | ~$13/月 |
+| Scenario | LLM Calls | Monthly Cost |
+|----------|-----------|--------------|
+| 5 sessions/day | ~8 calls/day | ~$7/month |
+| 10 sessions/day | ~15 calls/day | ~$13/month |
 
-使用 Haiku 做 routine 分类，Sonnet 做复杂决策，自动分层。
+Haiku is used for routine classification, Sonnet for complex decisions — automatic tiering.
 
-## 隐私
+## Privacy
 
-- 所有数据存储在本地 `learning/data/`
-- 不外传任何数据（除 LLM 调用外）
-- 原子写入（tmp + rename），防止数据损坏
-- 不包含遥测或追踪
+- All data stored locally in `learning/data/`
+- No telemetry, no tracking
+- Atomic writes (tmp + rename) to prevent corruption
+- Nothing leaves your machine except LLM API calls
 
 ## License
 

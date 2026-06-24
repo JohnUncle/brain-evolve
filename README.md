@@ -36,7 +36,7 @@ Brain-Evolve 是一个 **Claude Code 自我进化系统**。它通过 Hook 监�
 ```bash
 # 克隆到你的项目
 cd your-project/.claude
-git clone https://github.com/YOUR_USERNAME/brain-evolve.git
+git clone https://github.com/JohnUncle/brain-evolve.git
 cd brain-evolve
 
 # 注册 Hook
